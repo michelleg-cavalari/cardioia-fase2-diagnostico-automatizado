@@ -1,4 +1,4 @@
-# 🫀 CardioIA - Fase 2: Diagnóstico Automatizado com IA
+#  CardioIA - Fase 2: Diagnóstico Automatizado com IA
 
 ## Integrantes
 - Michelle Cavalari rm564557
@@ -25,7 +25,7 @@ O sistema simula, de forma simplificada, o funcionamento de tecnologias utilizad
 - Refletir sobre vieses e governança de dados em IA
 
 ---
-## 🗂️ Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```bash
 cardioia-fase2-diagnostico-automatizado/
