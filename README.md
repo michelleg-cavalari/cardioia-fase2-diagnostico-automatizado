@@ -151,10 +151,10 @@ python src/parte2_classificador.py
 
 ---
 
-## 🎥 Vídeo de Demonstração
+##  Vídeo de Demonstração
 
 🔗 Link do vídeo (não listado no YouTube):  
-*(adicione aqui o link)*
+*https://youtu.be/TVisHaDAAz0*
 
 ---
 
