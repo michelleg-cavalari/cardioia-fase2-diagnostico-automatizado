@@ -1,48 +1,59 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-# Carregar dados
-df = pd.read_csv("data/frases_risco.csv")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ARQUIVO_DADOS = os.path.join(BASE_DIR, "data", "frases_risco.csv")
 
-# Separar dados
-X = df["frase"]
-y = df["situacao"]
+def main():
+    df = pd.read_csv(ARQUIVO_DADOS)
 
-# Dividir treino/teste
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
-)
+    print("=" * 60)
+    print("CARDIOIA - CLASSIFICADOR DE RISCO")
+    print("=" * 60)
+    print("\nBase de dados:")
+    print(df.head())
 
-# Transformar texto em números
-vectorizer = TfidfVectorizer()
-X_train_tfidf = vectorizer.fit_transform(X_train)
-X_test_tfidf = vectorizer.transform(X_test)
+    X = df["frase"]
+    y = df["situacao"]
 
-# Treinar modelo
-model = LogisticRegression()
-model.fit(X_train_tfidf, y_train)
+    X_treino, X_teste, y_treino, y_teste = train_test_split(
+        X, y, test_size=0.3, random_state=42, stratify=y
+    )
 
-# Previsão
-predictions = model.predict(X_test_tfidf)
+    vectorizer = TfidfVectorizer()
+    X_treino_tfidf = vectorizer.fit_transform(X_treino)
+    X_teste_tfidf = vectorizer.transform(X_teste)
 
-# Avaliação
-accuracy = accuracy_score(y_test, predictions)
+    modelo = LogisticRegression()
+    modelo.fit(X_treino_tfidf, y_treino)
 
-print("Acurácia:", accuracy)
+    previsoes = modelo.predict(X_teste_tfidf)
 
-# Teste com novas frases
-novas_frases = [
-    "dor no peito e falta de ar",
-    "leve dor nas costas",
-    "tontura e coração acelerado"
-]
+    acuracia = accuracy_score(y_teste, previsoes)
 
-novas_tfidf = vectorizer.transform(novas_frases)
-resultados = model.predict(novas_tfidf)
+    print("\nAcurácia:", round(acuracia, 2))
+    print("\nRelatório de classificação:")
+    print(classification_report(y_teste, previsoes))
+    print("Matriz de confusão:")
+    print(confusion_matrix(y_teste, previsoes))
 
-print("\nTestes novos:")
-for frase, resultado in zip(novas_frases, resultados):
-    print(frase, "→", resultado)
+    frases_novas = [
+        "estou com dor no peito e suor intenso",
+        "tenho apenas um leve cansaço hoje",
+        "estou com falta de ar e tontura",
+        "sinto um pequeno incômodo muscular"
+    ]
+
+    frases_novas_tfidf = vectorizer.transform(frases_novas)
+    predicoes_novas = modelo.predict(frases_novas_tfidf)
+
+    print("\nTeste com novas frases:")
+    for frase, predicao in zip(frases_novas, predicoes_novas):
+        print(f"- {frase} -> {predicao}")
+
+if __name__ == "__main__":
+    main()
