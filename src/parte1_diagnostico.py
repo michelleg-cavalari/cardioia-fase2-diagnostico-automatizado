@@ -1,9 +1,14 @@
+import os
 import csv
 from collections import Counter
 
-# Caminhos dos arquivos
-ARQUIVO_FRASES = "data/frases_sintomas.txt"
-ARQUIVO_MAPA = "data/mapa_conhecimento.csv"
+from collections import Counter
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+ARQUIVO_FRASES = os.path.join(BASE_DIR, "data", "frases_sintomas.txt")
+ARQUIVO_MAPA = os.path.join(BASE_DIR, "data", "mapa_conhecimento.csv")
 
 
 def carregar_frases(caminho):
